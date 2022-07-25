@@ -17,7 +17,7 @@ metadata:
   name: cluster-$CLUSTER_ID
   namespace: fleet-default
   labels:
-    cluster-id: "store-$CLUSTER_ID"
+    cluster-id: "cluster-$CLUSTER_ID"
 spec: {}
 EOF
 
