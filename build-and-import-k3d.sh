@@ -7,11 +7,14 @@ MAX_CLUSTER_ID=200
 
 SKIP_IMPORT=false
 
+CLUSTER_LIST=`seq $MIN_CLUSTER_ID $MAX_CLUSTER_ID`
 
-for CLUSTER_ID in {seq $MIN_CLUSTER_ID $MAX_CLUSTER_ID}
+
+
+for CLUSTER_ID in $CLUSTER_LIST
 do
 
-if [[ $SKIP_IMPORT != "false" ]]
+if [[ $SKIP_IMPORT != "true" ]]
 then
 
 cat << EOF | kubectl --context $LOCAL_CONTEXT apply -f -
@@ -30,7 +33,7 @@ fi
 k3d cluster create --api-port 0.0.0.0:7$CLUSTER_ID cluster-$CLUSTER_ID
 
 
-if [[ $SKIP_IMPORT != "false" ]]
+if [[ $SKIP_IMPORT != "true" ]]
 then
 
 REG_TOKEN_LINK=`curl --user $RANCHER_API_AUTH $RANCHER_URL/v3/clusters?name=cluster-$CLUSTER_ID |jq ".data[0].links.clusterRegistrationTokens" -r`
