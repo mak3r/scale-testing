@@ -1,7 +1,7 @@
 resource "aws_db_instance" "default" {
   allocated_storage    = 10
-  engine               = "mysql"
-  engine_version       = "5.7"
+  engine               = "mariadb"
+  engine_version       = "10.6"
   instance_class       = var.db_instance_type
   db_name              = "k3s"
   username             = "rancher"
