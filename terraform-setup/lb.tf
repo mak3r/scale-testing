@@ -40,7 +40,7 @@ resource "aws_elb" "rancher-server-lb" {
 
 resource "aws_route53_record" "rancher" {
   zone_id = data.aws_route53_zone.rancher.zone_id
-  name    = "k3s-sql.${data.aws_route53_zone.rancher.name}"
+  name    = "${var.rancher_url}.${data.aws_route53_zone.rancher.name}"
   type    = "CNAME"
   ttl     = "5"
 

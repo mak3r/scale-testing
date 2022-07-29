@@ -28,8 +28,20 @@ variable "db_instance_type" {
   default = "db.t2.micro"
 }
 
+variable "rancher_url" {
+	type = string
+	description = "The subdomain for this rancher installation"
+	default = "rancher-demo"
+}
+
 variable "db_password" {
 	type = string
 	description = "The rds db password"
 	default = "adlkj^k1Kp9.432Xxn-z21"
+}
+
+variable "domain" {
+	type = string
+	description = "The domain to attach this rancher url onto"
+	default = "mak3r.design."
 }

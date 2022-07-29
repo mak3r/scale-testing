@@ -14,6 +14,6 @@ data "aws_ami" "suse" {
 }
 
 data "aws_route53_zone" "rancher" {
-  name = "mak3r.design."
+  name = "${var.domain}"
   private_zone = false
 }
