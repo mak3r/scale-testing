@@ -5,9 +5,10 @@ SERVER_NUM=-1
 ADMIN_SECRET="6DfOqQMzaNFTg6VV"
 K3S_CHANNEL=v1.23
 K3S_UPGRADE_CHANNEL=v1.24
-RANCHER_URL=scale-test
+RANCHER_SUBDOMAIN=scale-test
 SQL_PASSWORD="Kw309ii9mZpqD"
 export KUBECONFIG=kubeconfig
+BACKUP_NAME=kubeconfig.scale_test
 
 destroy:
 	-rm kubeconfig
@@ -18,7 +19,7 @@ sleep:
 
 infrastructure:
 	echo "Creating infrastructure"
-	cd terraform-setup && terraform init && terraform apply -auto-approve -var rancher_url=$(RANCHER_URL) -var db_password=$(SQL_PASSWORD)
+	cd terraform-setup && terraform init && terraform apply -auto-approve -var rancher_url=$(RANCHER_SUBDOMAIN) -var db_password=$(SQL_PASSWORD)
 
 k3s-install: 
 	echo "Creating k3s cluster"
@@ -27,25 +28,35 @@ k3s-install:
 	source get_env.sh && scp -o StrictHostKeyChecking=no ec2-user@$${IP0}:/etc/rancher/k3s/k3s.yaml kubeconfig
 	source get_env.sh && sed -i '' "s/127.0.0.1/$${IP0}/g" kubeconfig
 
+backup_kubeconfig:
+	cp ~/.kube/config ~/.kube/$(BACKUP_NAME)
+
+install_kubeconfig:
+	cp ./kubeconfig ~/.kube/config
+
+restore_kubeconfig:
+	cp ~/.kube/$(BACKUP_NAME) ~/.kube/config
 
 rancher: 
 	echo "Installing cert-manager and Rancher"
-	kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.3/cert-manager.crds.yaml
+	kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml
 	helm repo update
 	helm upgrade --install \
 		  cert-manager jetstack/cert-manager \
 		  --namespace cert-manager \
-		  --version v1.0.3 --create-namespace --set installCRDs=true
+		  --version v1.9.1 \
+		  --create-namespace 
 	kubectl rollout status deployment -n cert-manager cert-manager
 	kubectl rollout status deployment -n cert-manager cert-manager-webhook
-	helm upgrade --install rancher rancher-stable/rancher \
+	source get_env.sh && helm upgrade --install rancher rancher-stable/rancher \
 	  --namespace cattle-system \
 	  --version ${RANCHER_VERSION} \
-	  --set hostname=rancher-demo.mak3r.design \
+	  --set hostname=$${URL} \
 	  --set bootstrapPassword=${ADMIN_SECRET} \
+	  --set replicas=2 \
 	  --create-namespace 
 	kubectl rollout status deployment -n cattle-system rancher
 	kubectl -n cattle-system wait --for=condition=ready certificate/tls-rancher-ingress
 	echo
 	echo
-	echo https://rancher-demo.mak3r.design/dashboard/?setup=${ADMIN_SECRET}
+	source get_env.sh && echo https://$${URL}/dashboard/?setup=${ADMIN_SECRET}
