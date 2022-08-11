@@ -60,3 +60,6 @@ rancher:
 	echo
 	echo
 	source get_env.sh && echo https://$${URL}/dashboard/?setup=${ADMIN_SECRET}
+
+install_scripts:
+	sudo cp ./bin/*.sh /usr/local/bin
