@@ -3,3 +3,5 @@ crash.log
 .terraform
 terraform.tfstate
 terraform.tfstate.backup
+kubeconfig
+scratch.md
