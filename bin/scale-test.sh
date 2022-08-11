@@ -6,30 +6,34 @@
 # Building virtual clusters and connecting them to a Rancher Management Server
 # The targeted downstream cluster is expected to be a single node cluster at this time.
 ###############
-
+source cluster-ops.sh
 
 RANCHER_URL=$1
 CLUSTERS_PREFIX=$2
 
 # Check that requirements are available
-def check-config() {
-  if command -v vcluster; then echo 0; else echo 1; fi 
+function check-config() {
+  if command -v vcluster; then 
+    echo 0
+  else 
+    echo 1 
+  fi 
 }
 
 # Get baselines for CPU and RAM
 ## Get memory usage
-def memory-usage() {
+function memory-usage() {
   kubectl get --raw "/apis/metrics.k8s.io/v1beta1/nodes" | jq '.items[0].usage.memory'
 }
 
 ## Get CPU usage
-def cpu-usage() {
+function cpu-usage() {
   kubectl get --raw "/apis/metrics.k8s.io/v1beta1/nodes" | jq '.items[0].usage.cpu'
 }
 
 
 # Create a virtual cluster
-def create-cluster() {
+function create-cluster() {
   vcluster create $1 
 }
 
