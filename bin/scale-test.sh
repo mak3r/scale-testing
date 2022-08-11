@@ -8,16 +8,20 @@
 ###############
 source cluster-ops.sh
 
-RANCHER_URL=$1
-CLUSTERS_PREFIX=$2
-
 # Check that requirements are available
 function check-config() {
-  if command -v vcluster; then 
-    echo 0
-  else 
-    echo 1 
-  fi 
+  executable=$1
+  e=$(command -v $executable)
+  if [ -z "$e" ]; then echo "[FAIL]: $executable not found"; else echo "[SUCCESS]: $e"; fi
+}
+
+function scale-test-deps-check() {
+	check-config "vcluster"
+	check-config "terraform"
+	check-config "kubectl"
+	check-config "helm"
+	check-config "make"
+	check-config "jq"
 }
 
 # Get baselines for CPU and RAM
@@ -33,8 +37,11 @@ function cpu-usage() {
 
 
 # Create a virtual cluster
-function create-cluster() {
-  vcluster create $1 
+function new-cluster() {
+  CLUSTER_NAME=$1
+  INIT_COMMAND=$(create-cluster $CLUSTER_NAME)
+  $INIT_COMMAND | sed 's/\(^.*$\)/    \1/g' | cat templates/vcluster-init-head.yaml - > $CLUSTER_NAME.yaml
+  vcluster create $CLUSTER_NAME -f $CLUSTER_NAME.yaml --distro k3s --expose 
 }
 
 # Create a cluster in Rancher

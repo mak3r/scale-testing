@@ -61,5 +61,10 @@ rancher:
 	echo
 	source get_env.sh && echo https://$${URL}/dashboard/?setup=${ADMIN_SECRET}
 
+install_downstream_env:
+	echo "Installing K3s on the local system"
+	curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=$(K3S_CHANNEL) INSTALL_K3S_EXEC="--write-kubeconfig-mode 0644 --tls-san=$(HOSTNAME) --write-kubeconfig=$(pwd)/kubeconfig" sh -
+
+
 install_scripts:
 	sudo cp ./bin/*.sh /usr/local/bin

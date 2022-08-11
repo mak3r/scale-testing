@@ -30,7 +30,7 @@ function create-cluster()
   CLUSTER_ID=$(curl -s -k -u "$ACCESS_TOKEN" https://$RANCHER_HOST/v1/provisioning.cattle.io.clusters/fleet-default/$CLUSTER_NAME | jq -r '.status.clusterName');
 
   # Get registration commands
-  curl -s -k -u "$ACCESS_TOKEN" https://$RANCHER_HOST/v3/clusterregistrationtokens?clusterId=$CLUSTER_ID | jq -r '.data[] | {command, insecureCommand}';
+  curl -s -k -u "$ACCESS_TOKEN" https://$RANCHER_HOST/v3/clusterregistrationtokens?clusterId=$CLUSTER_ID | jq -r '.data[].insecureCommand' | cut -d'|' -f 1;
 }
 
 # takes arguement of cluster name within rancher
