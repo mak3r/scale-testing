@@ -16,7 +16,7 @@ make rancher
 ```
 
 1. Login to the Rancher at the URL output by the last make command
-1. Get and ACCESS_TOKEN for use when spinning up clusters
+1. Get an ACCESS_TOKEN for use when spinning up clusters
 
 ### Build a Downstream Cluster to Host VClusters
 `make install_downstream_env`
