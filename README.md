@@ -1,6 +1,12 @@
 # scale-testing
 Scale testing cloud native
 
+## Dependencies
+1. Clone this repo
+1. Install the scripts with `make install_scripts`
+1. Load the script functions into the shell `source scale-test.sh`
+1. Run `scale-test-deps-check` to see what is required
+
 ## Quick Start
 ### Build the Rancher infrastructure
 ```
