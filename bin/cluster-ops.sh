@@ -40,4 +40,9 @@ function get_cluster_status ()
   CLUSTER_NS='fleet-default';
   curl -sk -u $ACCESS_TOKEN https://$RANCHER_HOST/v1/provisioning.cattle.io.clusters/$CLUSTER_NS/$CLUSTER_NAME | jq '.metadata.state';
 }
-  
+
+function delete_cluster() 
+{
+	curl -s -k -X DELETE -u "$ACCESS_TOKEN" https://$RANCHER_HOST/v1/provisioning.cattle.io.clusters/fleet-default/$cluster_name 
+
+}

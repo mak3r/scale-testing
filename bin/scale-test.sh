@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -x
 
 
 ###############
@@ -6,7 +6,7 @@
 # Building virtual clusters and connecting them to a Rancher Management Server
 # The targeted downstream cluster is expected to be a single node cluster at this time.
 ###############
-source cluster-ops.sh
+source /usr/local/bin/cluster-ops.sh
 
 # Check that requirements are available
 function check-config() {
@@ -42,6 +42,7 @@ function new-cluster() {
   INIT_COMMAND=$(create-cluster $CLUSTER_NAME)
   $INIT_COMMAND | sed 's/\(^.*$\)/    \1/g' | cat templates/vcluster-init-head.yaml - > $CLUSTER_NAME.yaml
   vcluster create $CLUSTER_NAME -f $CLUSTER_NAME.yaml --distro k3s --expose-local --connect=false
+  rm $CLUSTER_NAME.yaml
 }
 
 # Create a cluster in Rancher
