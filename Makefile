@@ -17,6 +17,8 @@ destroy:
 sleep:
 	sleep 60
 
+rancher-quick: infrastructure k3s-install rancher
+
 infrastructure:
 	echo "Creating infrastructure"
 	cd terraform-setup && terraform init && terraform apply -auto-approve -var rancher_url=$(RANCHER_SUBDOMAIN) -var db_password=$(SQL_PASSWORD)
