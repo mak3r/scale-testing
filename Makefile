@@ -63,8 +63,11 @@ rancher:
 
 install_downstream_env:
 	echo "Installing K3s on the local system"
-	curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=$(K3S_CHANNEL) INSTALL_K3S_EXEC="--write-kubeconfig-mode 0644 --tls-san=$(HOSTNAME) --write-kubeconfig=$(pwd)/kubeconfig" sh -
-
+	sudo mkdir -p /etc/rancher/k3s
+	sudo cp k3s-config/config.yaml /etc/rancher/k3s/.
+	sudo cp k3s-config/kubelet.conf /etc/rancher/k3s/.
+	curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=$(K3S_CHANNEL) sh -
+	cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
 
 install_scripts:
 	sudo cp ./bin/*.sh /usr/local/bin

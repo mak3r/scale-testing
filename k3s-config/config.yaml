@@ -1,0 +1,6 @@
+write-kubeconfig: "/home/mak3r/kubeconfig" 
+write-kubeconfig-mode: "0644"
+tls-san:
+  - "mnt-collins-suse3"
+  - "virt72.devlab.prv.suse.com"
+kubelet-arg: "config=/etc/rancher/k3s/kubelet.conf"
