@@ -66,10 +66,17 @@ rancher:
 install_downstream_env:
 	echo "Installing K3s on the local system"
 	sudo mkdir -p /etc/rancher/k3s
-	sudo cp k3s-config/config.yaml /etc/rancher/k3s/.
-	sudo cp k3s-config/kubelet.conf /etc/rancher/k3s/.
+	sudo cp k3s-config/config.yaml /etc/rancher/k3s/config.yaml
+	sudo sed -i""  "s/{HOSTNAME}/$(hostname)/" /etc/rancher/k3s/config.yaml
+	sudo cp k3s-config/kubelet.conf /etc/rancher/k3s/kubelet.conf
 	curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=$(K3S_CHANNEL) sh -
 	cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
 
 install_scripts:
 	sudo cp ./bin/*.sh /usr/local/bin
+
+downstreams:
+	# Do this for every downstream host
+	ssh ec2-user@${IP} "/bin/bash -s" < bin/install-k3s.sh
+	ssh ec2-user@${IP} "/bin/bash -s" < bin/install-helm.sh
+	ssh ec2-user@${IP} "/bin/bash -s" < bin/install-vcluster.sh

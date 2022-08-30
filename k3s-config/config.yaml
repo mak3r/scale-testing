@@ -1,6 +1,5 @@
-write-kubeconfig: "/home/mak3r/kubeconfig" 
+write-kubeconfig: "/home/{USER}/config" 
 write-kubeconfig-mode: "0644"
 tls-san:
-  - "mnt-collins-suse3"
-  - "virt72.devlab.prv.suse.com"
+  - "{HOSTNAME}"
 kubelet-arg: "config=/etc/rancher/k3s/kubelet.conf"
