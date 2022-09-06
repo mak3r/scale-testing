@@ -23,7 +23,7 @@ resource "aws_security_group" "sg_allowall" {
   }
 }
 
-resource "aws_instance" "vms" {
+resource "aws_instance" "rancher" {
   count         = 2
   ami           = data.aws_ami.suse.id
   instance_type = "t3a.xlarge"
@@ -36,6 +36,23 @@ resource "aws_instance" "vms" {
   }
 
   tags = {
-    Name = "${var.prefix}-rancher-k3s-sql-suse"
+    Use = "${var.prefix}-rancher-k3s-sql"
+  }
+}
+
+resource "aws_instance" "downstreams" {
+  count         = 3
+  ami           = data.aws_ami.suse.id
+  instance_type = "t3a.2xlarge"
+
+  key_name        = aws_key_pair.ssh_key_pair.key_name
+  security_groups = [aws_security_group.sg_allowall.name]
+
+  root_block_device {
+    volume_size = 80
+  }
+
+  tags = {
+    Use = "${var.prefix}-rancher-k3s-downstream"
   }
 }

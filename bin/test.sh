@@ -3,13 +3,13 @@
 source /usr/local/bin/scale-test.sh
 
 RANCHER_HOST="scale-test.mak3r.design"
-ACCESS_TOKEN="token-ctlhv:tgcf9vkxr8x8wqtg2dgx9wsxr7bg2mbbq2j6hjm8vklp7k6g7nqf5p"
 CLUSTER_PREFIX="vcluster"
 DATA_FILE="timings.txt"
 
 function create-n() {
 	COUNT=$1
 	START=$2
+	ACCESS_TOKEN=$3 #"token-ctlhv:tgcf9vkooEXAMPLEoo9wsxr7bg2mbbq2j6hjm8vklp7k6g7nqf5p"
 	HEADER="CLUSTER NAME\tCLUSTER CREATE TIME\tHOURS\tMINUTES\tSECONDS\tREADY TIME\tHOURS\tMINUTES\tSECONDS\tDURATION"
 	PROCESS_BEGIN=$(date +%s)
 	printf "$HEADER\n" >> $DATA_FILE
@@ -43,6 +43,7 @@ function create-n() {
 function delete-n() {
 	COUNT=$1
 	START=$2
+	ACCESS_TOKEN=$3
 	for ((i=$START; i<$COUNT; i++)); do
 		cluster_name=$CLUSTER_PREFIX$(printf "%02d" $i)
 		#Delete from rancher

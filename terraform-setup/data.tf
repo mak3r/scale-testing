@@ -17,3 +17,4 @@ data "aws_route53_zone" "rancher" {
   name = "${var.domain}"
   private_zone = false
 }
+

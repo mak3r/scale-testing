@@ -45,3 +45,9 @@ variable "domain" {
 	description = "The domain to attach this rancher url onto"
 	default = "mak3r.design."
 }
+
+variable "downstream_count" {
+	type = number
+	description = "The number of downstream instances to create"
+	default = 3
+}

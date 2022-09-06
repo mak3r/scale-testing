@@ -5,9 +5,17 @@ output "url" {
 }
 output "rancher_cluster_ips" {
   value = [
-    aws_instance.vms.0.public_ip,
-    aws_instance.vms.1.public_ip,
+    aws_instance.rancher.0.public_ip,
+    aws_instance.rancher.1.public_ip,
   ]
+}
+
+output "downstream_ips" {
+	value = aws_instance.downstreams.*.public_ip
+}
+
+output "downstream_count" {
+	value = var.downstream_count
 }
 
 output "rds_endpoint" {
