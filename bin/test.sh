@@ -7,13 +7,13 @@ CLUSTER_PREFIX="vcluster"
 DATA_FILE="timings.txt"
 
 function create-n() {
-	COUNT=$1
+	END=$1
 	START=$2
 	ACCESS_TOKEN=$3 #"token-ctlhv:tgcf9vkooEXAMPLEoo9wsxr7bg2mbbq2j6hjm8vklp7k6g7nqf5p"
 	HEADER="CLUSTER NAME\tCLUSTER CREATE TIME\tHOURS\tMINUTES\tSECONDS\tREADY TIME\tHOURS\tMINUTES\tSECONDS\tDURATION"
 	PROCESS_BEGIN=$(date +%s)
 	printf "$HEADER\n" >> $DATA_FILE
-	for ((i=$START; i<$COUNT; i++)); do
+	for ((i=$START; i<$END; i++)); do
 		cluster_name=$CLUSTER_PREFIX$(printf "%04d" $i)
 		printf "$cluster_name" >> $DATA_FILE
 		BEGIN=$(date +%s)
@@ -41,10 +41,10 @@ function create-n() {
 }
 
 function delete-n() {
-	COUNT=$1
+	END=$1
 	START=$2
 	ACCESS_TOKEN=$3
-	for ((i=$START; i<$COUNT; i++)); do
+	for ((i=$START; i<$END; i++)); do
 		cluster_name=$CLUSTER_PREFIX$(printf "%02d" $i)
 		#Delete from rancher
 		curl -s -k -u "$ACCESS_TOKEN" -X DELETE  https://$RANCHER_HOST/v1/provisioning.cattle.io.clusters/fleet-default/$cluster_name > /dev/null
