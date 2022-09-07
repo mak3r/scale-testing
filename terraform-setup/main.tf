@@ -41,7 +41,7 @@ resource "aws_instance" "rancher" {
 }
 
 resource "aws_instance" "downstreams" {
-  count         = 3
+  count         = var.downstream_count
   ami           = data.aws_ami.suse.id
   instance_type = "t3a.2xlarge"
 

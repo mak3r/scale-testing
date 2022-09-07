@@ -10,6 +10,7 @@ SQL_PASSWORD="Kw309ii9mZpqD"
 export KUBECONFIG=kubeconfig
 BACKUP_NAME=kubeconfig.scale_test
 API_TOKEN="abcdef:EXAMPLEtokenGoesHere"
+DOWNSTREAM_COUNT=30
 
 destroy:
 	-rm kubeconfig
@@ -22,7 +23,7 @@ rancher-quick: infrastructure k3s-install rancher
 
 infrastructure:
 	echo "Creating infrastructure"
-	cd terraform-setup && terraform init && terraform apply -auto-approve -var rancher_url=$(RANCHER_SUBDOMAIN) -var db_password=$(SQL_PASSWORD)
+	cd terraform-setup && terraform init && terraform apply -auto-approve -var rancher_url=$(RANCHER_SUBDOMAIN) -var db_password=$(SQL_PASSWORD) -var downstream_count=$(DOWNSTREAM_COUNT)
 
 k3s-install: 
 	echo "Creating k3s cluster"
