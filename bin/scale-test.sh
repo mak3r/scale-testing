@@ -40,7 +40,7 @@ function cpu-usage() {
 function new-cluster() {
   CLUSTER_NAME=$1
   INIT_COMMAND=$(create-cluster $CLUSTER_NAME)
-  $INIT_COMMAND | sed 's/\(^.*$\)/    \1/g' | cat templates/vcluster-init-head.yaml - > $CLUSTER_NAME.yaml
+  $INIT_COMMAND | sed 's/\(^.*$\)/    \1/g' | cat templates/vcluster-init-head.yaml - ./vcluster.yaml > $CLUSTER_NAME.yaml
   vcluster create $CLUSTER_NAME -f $CLUSTER_NAME.yaml --distro k3s --expose-local --connect=false
   rm $CLUSTER_NAME.yaml
 }
