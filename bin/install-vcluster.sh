@@ -8,8 +8,6 @@ sudo mv vcluster /usr/local/bin
 # We can pack about 100 vclusters into 8CPU 32GB RAM 
 # with this configuration.
 cat > ./vcluster.yaml << EOF
-
--- 
 vcluster:
   resources:
     limits:
