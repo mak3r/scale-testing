@@ -3,7 +3,7 @@
 source /usr/local/bin/scale-test.sh
 
 RANCHER_HOST="scale-test.mak3r.design"
-CLUSTER_PREFIX="vcluster"
+CLUSTER_PREFIX="vc"
 DATA_FILE="timings.txt"
 
 function create-n() {

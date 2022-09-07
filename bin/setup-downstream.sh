@@ -25,6 +25,6 @@ function install-downstreams {
 
 for i in "${!DIP[@]}"
 do 
-	install-downstreams "${DIP[$i]}" $i $TOKEN; 
+	install-downstreams "${DIP[$i]}" $i $TOKEN &
 done
 
