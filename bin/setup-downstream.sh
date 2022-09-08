@@ -12,7 +12,7 @@ function install-downstreams {
 	ACCESS_TOKEN=$3
 
 	ssh -o StrictHostKeychecking=no ec2-user@$DOWNIP "sudo zypper -n in jq git make"	
-	ssh ec2-user@$DOWNIP "git clone https://github.com/mak3r/scale-testing.git"
+	ssh ec2-user@$DOWNIP "git clone -b registered-clusters https://github.com/mak3r/scale-testing.git"
 	ssh ec2-user@$DOWNIP "cd scale-testing && bin/install-k3s.sh"
 	ssh ec2-user@$DOWNIP "cd scale-testing && bin/install-helm.sh"
 	ssh ec2-user@$DOWNIP "cd scale-testing && bin/install-vcluster.sh"
@@ -25,6 +25,6 @@ function install-downstreams {
 
 for i in "${!DIP[@]}"
 do 
-	install-downstreams "${DIP[$i]}" $i $TOKEN &
+	install-downstreams "${DIP[$i]}" $i $TOKEN
 done
 
