@@ -65,18 +65,11 @@ rancher:
 	echo
 	source bin/get-env.sh && echo https://$${URL}/dashboard/?setup=${ADMIN_SECRET}
 
-install_downstream_env:
-	echo "Installing K3s on the local system"
-	sudo mkdir -p /etc/rancher/k3s
-	sudo cp k3s-config/config.yaml /etc/rancher/k3s/config.yaml
-	sudo sed -i""  "s/{HOSTNAME}/$(hostname)/" /etc/rancher/k3s/config.yaml
-	sudo cp k3s-config/kubelet.conf /etc/rancher/k3s/kubelet.conf
-	curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=$(K3S_CHANNEL) sh -
-	cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-
 install_scripts:
 	sudo cp ./bin/*.sh /usr/local/bin
 
 downstream:
 	# Do this for every downstream host
-	bin/setup-downstream.sh $(API_TOKEN)
+	# First argument is the API_TOKEN generated using Rancher.
+	# Second argument is the number of downstream virtual clusters to setup on every host.
+	bin/setup-downstream.sh $(API_TOKEN) 35

@@ -2,13 +2,14 @@
 
 source bin/get-env.sh 
 TOKEN=$1
+VCLUSTER_PER_CLUSTER=$2
 
 function install-downstreams {
 	echo $0
 	echo $@
 	DOWNIP=$1
-	START=$(( ($2 * 100) + 1 ))
-	END=$(( ($2+1) * 100 ))
+	START=$(( ($2 * $VCLUSTER_PER_CLUSTER) + 1 ))
+	END=$(( ($2+1) * $VCLUSTER_PER_CLUSTER ))
 	ACCESS_TOKEN=$3
 
 	ssh -o StrictHostKeychecking=no ec2-user@$DOWNIP "sudo zypper -n in jq git make"	

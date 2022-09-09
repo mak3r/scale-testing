@@ -2,30 +2,40 @@
 Scale testing cloud native
 
 ## Dependencies
-1. Clone this repo
-1. Install the scripts with `make install_scripts`
-1. Load the script functions into the shell `source scale-test.sh`
-1. Run `scale-test-deps-check` to see what is required
+
+* terraform
+* helm
+* jq
+* kubectl
+* aws
+* dns address for Rancher
 
 ## Quick Start
+### Prep
+* `cp terraform-setup/terraform.tfvars.template terraform-setup/terraform.tfvars`
+    * Adjust the tfvars variables as desired
+* Set your aws account id and key using the terraform variables
+    * `aws_access_key_id`
+    * `aws_secret_access_key`
+* See `variables.tf` for other infrastructure configuration 
+* Make sure you have a registered domain
+    * Use terraform variable `domain` to set it
+    * Use terraform variable `rancher_url` to set the subdomain
+    * fqdn is <rancher_url>.<domain>
+
 ### Build the Rancher infrastructure
 ```
-make infrastructure
+make DOWNSTREAM_COUNT=3 infrastructure
 make k3s-install
 make rancher
 ```
+The prior commands will create 2 infrastructure nodes for the rancher cluster and 3 nodes (using `DOWNSTREAM_COUNT` variable) for populating with virtual clusters
 
-1. Login to the Rancher at the URL output by the last make command
+1. Login to Rancher at the URL output by the last make command
 1. Get an ACCESS_TOKEN for use when spinning up clusters
 
-### Build a Downstream Cluster to Host VClusters
-`make install_downstream_env`
+### Build Downstream Clusters 
+`make API_TOKEN="ab39g:4iooEXAMPLEooTOKENookj98z" downstream`
 
-### Spin up a Cluster and Connect It to Rancher
-```
-make install_scripts
-source scale-test.sh
-export RANCHER_HOST="scale-test.mak3r.design"
-export ACCESS_TOKEN="token-v6twl:6c986bh4fnxd7zw2tdvlwlbtdr9xsj765tnttg66kbps4rdjchrl4z"
-new-cluster <unique_cluster_name>
-```
+Using the access token you got from Rancher, the prior command will install k3s on the dowstream infrastructure and then begin installing vclusters based on the [bin/setup-downstream.sh](bin/setup-downstream.sh) script.
+
